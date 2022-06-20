@@ -19,8 +19,7 @@ public class Person {
     public Person() {
     }
 
-    public Person(Integer id, String name, Integer age) {
-        this.id = id;
+    public Person(String name, Integer age) {
         this.name = name;
         this.age = age;
     }
