@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/person")
 public class PersonResource {
@@ -16,7 +18,12 @@ public class PersonResource {
     private PersonService personService;
 
     @GetMapping
-    public Person getPersonByName(@RequestParam String name) {
+    public Person getByName(@RequestParam String name) {
         return personService.findByName(name);
+    }
+
+    @GetMapping("/all")
+    public List<Person> getAll() {
+        return personService.findAll();
     }
 }

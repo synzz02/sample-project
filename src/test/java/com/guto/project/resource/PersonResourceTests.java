@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(PersonResource.class)
 @ExtendWith(SpringExtension.class)
-public class PersonResourceTest {
+public class PersonResourceTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -37,5 +37,25 @@ public class PersonResourceTest {
                 .andExpect(status().isOk());
 
         verify(personServiceMock, times(1)).findByName(eq(name));
+    }
+
+    @Test
+    public void shouldCallFunctionToFindAll() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/person/all")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(personServiceMock, times(1)).findAll();
+    }
+
+    @Test
+    public void shouldNotCallFunctionToFindAllBecauseURLIsIncorrect() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/person")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        verify(personServiceMock, times(0)).findAll();
     }
 }
