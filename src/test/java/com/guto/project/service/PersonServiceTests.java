@@ -1,5 +1,6 @@
 package com.guto.project.service;
 
+import com.guto.project.domain.dto.PersonPersistDTO;
 import com.guto.project.domain.entity.Person;
 import com.guto.project.repository.PersonRepository;
 import org.junit.After;
@@ -64,5 +65,58 @@ public class PersonServiceTests {
         List<Person> listOfPersonsResult = personService.findAll();
 
         assertEquals(listOfPersons.toString(), listOfPersonsResult.toString());
+    }
+
+    @Test
+    public void shouldSavePerson() {
+        PersonPersistDTO personPersistDTO = new PersonPersistDTO("Testing guto", 22);
+        personService.save(personPersistDTO);
+
+        Person person = personRepository.findByName(personPersistDTO.getName());
+
+        assertEquals(personPersistDTO.getName(), person.getName());
+    }
+
+    @Test
+    public void shouldNotSavePersonBecauseAgeIsNull() {
+        PersonPersistDTO personPersistDTO = new PersonPersistDTO();
+        personPersistDTO.setName("Testing guto um");
+
+        assertNull(personService.save(personPersistDTO));
+    }
+
+    @Test
+    public void shouldNotSavePersonBecauseNameIsNull() {
+        PersonPersistDTO personPersistDTO = new PersonPersistDTO();
+        personPersistDTO.setAge(18);
+
+        assertNull(personService.save(personPersistDTO));
+    }
+
+    @Test
+    public void shouldNotSavePersonBecauseNameIsBlank() {
+        PersonPersistDTO personPersistDTO = new PersonPersistDTO();
+        personPersistDTO.setAge(18);
+        personPersistDTO.setName(" ");
+
+        assertNull(personService.save(personPersistDTO));
+    }
+
+    @Test
+    public void shouldNotSavePersonBecauseAgeIsZero() {
+        PersonPersistDTO personPersistDTO = new PersonPersistDTO();
+        personPersistDTO.setAge(0);
+        personPersistDTO.setName("Testing guto three");
+
+        assertNull(personService.save(personPersistDTO));
+    }
+
+    @Test
+    public void shouldNotSavePersonBecauseAgeIsNegative() {
+        PersonPersistDTO personPersistDTO = new PersonPersistDTO();
+        personPersistDTO.setAge(-18);
+        personPersistDTO.setName("Testing guto four");
+
+        assertNull(personService.save(personPersistDTO));
     }
 }
