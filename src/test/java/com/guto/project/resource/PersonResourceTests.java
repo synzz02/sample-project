@@ -147,4 +147,11 @@ public class PersonResourceTests {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void shouldCallFunctionToDeletePerson() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/api/person/" + 25))
+                .andExpect(status().isOk());
+    }
 }

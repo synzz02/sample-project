@@ -43,4 +43,8 @@ public class PersonService {
         return null;
     }
 
+    public void delete(Integer id) {
+        personRepository.deleteById(id);
+    }
+
 }

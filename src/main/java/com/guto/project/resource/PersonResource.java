@@ -45,4 +45,9 @@ public class PersonResource {
         return personUpdated;
     }
 
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") Integer id) {
+        personService.delete(id);
+    }
+
 }

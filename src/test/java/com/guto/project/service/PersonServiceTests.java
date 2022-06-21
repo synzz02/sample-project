@@ -9,13 +9,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -148,5 +148,21 @@ public class PersonServiceTests {
         personPersistDTO.setName("Guto testing seven");
 
         assertNull(personService.update(id, personPersistDTO));
+    }
+
+    @Test
+    public void shouldDeletePerson() {
+        Integer id = this.person.getId();
+
+        personService.delete(id);
+
+        assertNull(personService.findByName(this.person.getName()));
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenTryingToDeletePersonWithIdThatDoesNotExist() {
+        assertThrows(EmptyResultDataAccessException.class, () -> {
+            personService.delete(999);
+        });
     }
 }
