@@ -35,4 +35,14 @@ public class PersonResource {
         }
         return personCreated;
     }
+
+    @PutMapping("/{id}")
+    public Person put(@PathVariable("id") Integer id, @RequestBody PersonPersistDTO personPersistDTO) {
+        Person personUpdated = personService.update(id, personPersistDTO);
+        if (personUpdated == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Person not found by ID or incorrect body for PUT request");
+        }
+        return personUpdated;
+    }
+
 }

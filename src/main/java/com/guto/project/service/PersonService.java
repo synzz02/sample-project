@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PersonService {
@@ -27,6 +28,17 @@ public class PersonService {
         if (persistDTO.validate()) {
             personRepository.save(new Person(personPersistDTO.getName(), personPersistDTO.getAge()));
             return this.findByName(persistDTO.getName());
+        }
+        return null;
+    }
+
+    public Person update(Integer id, PersonPersistDTO personPersistDTO) {
+        Optional<Person> person = personRepository.findById(id);
+        if (person.isPresent() && personPersistDTO.validate()) {
+            person.get().setName(personPersistDTO.getName());
+            person.get().setAge(personPersistDTO.getAge());
+            personRepository.save(person.get());
+            return person.get();
         }
         return null;
     }

@@ -119,4 +119,34 @@ public class PersonServiceTests {
 
         assertNull(personService.save(personPersistDTO));
     }
+
+    @Test
+    public void shouldUpdatePerson() {
+        Integer id = this.person.getId();
+        PersonPersistDTO personPersistDTO = new PersonPersistDTO("Testing guto five", 27);
+        personService.update(id, personPersistDTO);
+
+        Person person = personRepository.findByName(personPersistDTO.getName());
+
+        assertEquals(this.person.getId(), person.getId());
+        assertEquals(personPersistDTO.getName(), person.getName());
+        assertEquals(personPersistDTO.getAge(), person.getAge());
+    }
+
+    @Test
+    public void shouldNotUpdatePersonBecauseIdIsIncorrect() {
+        Integer id = 999;
+        PersonPersistDTO personPersistDTO = new PersonPersistDTO("Testing guto six", 28);
+
+        assertNull(personService.update(id, personPersistDTO));
+    }
+
+    @Test
+    public void shouldNotUpdatePersonBecauseBodyRequestIsIncorrect() {
+        Integer id = this.person.getId();
+        PersonPersistDTO personPersistDTO = new PersonPersistDTO();
+        personPersistDTO.setName("Guto testing seven");
+
+        assertNull(personService.update(id, personPersistDTO));
+    }
 }

@@ -113,4 +113,38 @@ public class PersonResourceTests {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void shouldCallFunctionToUpdatePerson() throws Exception {
+        String json = "{ \"name\": \"" + "Golden Wind" + "\", \"age\": 18 }";
+        Integer id = 25;
+
+        Mockito.when(personServiceMock.update(any(), any())).thenReturn(new Person("Golden Wind", 18));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/person/" + id)
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        ArgumentCaptor<PersonPersistDTO> captor = ArgumentCaptor.forClass(PersonPersistDTO.class);
+
+        verify(personServiceMock, times(1)).update(eq(id), captor.capture());
+
+        PersonPersistDTO dto = captor.getValue();
+        assertEquals("Golden Wind", dto.getName());
+    }
+
+    @Test
+    public void shouldNotCallFunctionToUpdatePersonBecauseBodyIsIncorrect() throws Exception {
+        String json = "{ \"age\": 18 }";
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/person/" + 25)
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
 }
